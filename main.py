@@ -7,7 +7,7 @@ st.title("Party Planner")
 # Number of expected guests
 total_guests = st.number_input("Expected number of guests", min_value=1, value=60)
 
-pl = st.number_input("P/L", min_value=0, value=0)
+pl = st.number_input("P/L", min_value=-100, value=0)
 
 # Import/Export section
 st.sidebar.header("Import/Export Data")
@@ -28,7 +28,7 @@ st.header("Shopping List")
 # Use imported data if available, otherwise use default
 initial_data = st.session_state.get('imported_data') if 'imported_data' in st.session_state else pd.DataFrame({
     "Item": ["Beer", "Wine", "Soda", "Water"],
-    "Quantity p.P": [6, 2, 4, 3],
+    "Quantity p.P": [6, 2, 0.01, 0.5],
     "Price per Unit CHF": [1.5, 4.0, 1.0, 0.5],
 })
 
@@ -88,7 +88,7 @@ def safe_format(x, format_type="float", decimal_places=2):
 display_df["Price per Unit CHF"] = display_df["Price per Unit CHF"].apply(lambda x: safe_format(x, "float", 2))
 display_df["Total Cost"] = display_df["Total Cost"].apply(lambda x: safe_format(x, "float", 2))
 display_df["Total Items"] = display_df["Total Items"].apply(lambda x: safe_format(x, "int"))
-display_df["Quantity p.P"] = display_df["Quantity p.P"].apply(lambda x: safe_format(x, "int"))
+display_df["Quantity p.P"] = display_df["Quantity p.P"].apply(lambda x: safe_format(x,  "float"))
 
 # Convert to string after safe formatting
 for col in display_df.columns:
@@ -112,7 +112,7 @@ st.table(display_df)
 
 # No-show rates
 st.header("Guest Contribution Based on No-Show Rates")
-no_show_rates = [0.05, 0.10, 0.15, 0.20, 0.25]
+no_show_rates = [0, 0.05, 0.10, 0.15, 0.20, 0.25]
 
 # No-show rates table with consistent formatting
 results = []
